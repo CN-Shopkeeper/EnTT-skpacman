@@ -2,10 +2,14 @@
 
 #include "pch.hpp"
 #include "renderer.hpp"
+#include "utils/singlton.hpp"
 #include "window.hpp"
 
-class Application {
+class Application : public Singlton<Application> {
  public:
+  std::unique_ptr<Window> window;
+  std::unique_ptr<Renderer> renderer;
+  std::unique_ptr<TextureManager> textureManager;
   static size_t TileSizeDisplayed;
   Coor pacmanInitCoor;
   Coor ghostInitCoor;
@@ -14,11 +18,8 @@ class Application {
   ~Application();
   void Run();
 
- private:
-  std::unique_ptr<Window> window_;
-  std::unique_ptr<Renderer> renderer_;
-  std::unique_ptr<TextureManager> textureManager_;
+  void StartUp();
+  void ShutDown();
 
-  void startUp();
-  void shutDown();
+ private:
 };

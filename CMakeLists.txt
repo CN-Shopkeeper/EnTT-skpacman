@@ -6,6 +6,8 @@ project(
   LANGUAGES CXX
 )
 
+set(CMAKE_EXE_LINKER_FLAGS "-Wl,-subsystem,console")
+
 if(MSVC)
   # 设置UTF-8编码选项
   add_compile_options(/utf-8)

@@ -1,6 +1,7 @@
 #include "app.hpp"
 
 #include "consts.hpp"
+#include "game.hpp"
 #include "pch.hpp"
 #include "utils/sdl_check.hpp"
 #include "utils/sdl_delete.hpp"
@@ -26,22 +27,28 @@ Application::Application(const std::string& title) {
   SDL_CHECK(SDL_Init(SDL_INIT_EVERYTHING));
   const int scaleFactor = getScaleFactor();
   std::cout << "Using scale factor: " << scaleFactor << '\n';
-  window_.reset(
+  window.reset(
       new Window(title, WindowWidth * scaleFactor, WindowHeight * scaleFactor));
-  renderer_.reset(new Renderer(*window_));
-  SDL_CHECK(SDL_RenderSetLogicalSize(renderer_->renderer.get(), WindowWidth,
+  renderer.reset(new Renderer(*window));
+  SDL_CHECK(SDL_RenderSetLogicalSize(renderer->renderer.get(), WindowWidth,
                                      WindowHeight));
-  textureManager_.reset(new TextureManager(renderer_.get()));
+  textureManager.reset(new TextureManager(renderer.get()));
 }
 
 Application::~Application() { SDL_Quit(); }
 
-void Application::startUp() {}
+void Application::StartUp() {
+  textureManager->LoadTilesheet(TilesheetName, "./resources/tilesheet.bmp",
+                                KeyColor, TilesheetCol, TilesheetRow);
+  textureManager->Load("Win", "./resources/win.bmp", KeyColor);
+  textureManager->Load("Gameover", "./resources/gameover.bmp", KeyColor);
+}
 
-void Application::shutDown() {}
+void Application::ShutDown() {}
 
 void Application::Run() {
-    int frame = 0;
+  GameContext::Init();
+  int frame = 0;
   bool quit = false;
   while (!quit) {
     SDL_Event e;
@@ -52,8 +59,10 @@ void Application::Run() {
       } else if (e.type == SDL_KEYDOWN) {
         // game.input(e.key.keysym.scancode);
       }
-      SDL_Delay(30);
     }
+    GameContext::GetInstance().Render();
+    renderer->Present();
+    SDL_Delay(30);
 
     // Game::logic is called once for each tile
     // Game::render is called for each pixel between tiles

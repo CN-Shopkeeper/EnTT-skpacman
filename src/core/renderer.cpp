@@ -22,7 +22,7 @@ void Renderer::DrawTexture(Texture& texture, const SDL_Rect& rect, int x,
 }
 
 void Renderer::DrawImage(const Image& image, const Pos& position,
-                         const std::optional<Size>& size) {
+                         const std::optional<Size>& size ) {
   SDL_FRect dst = {position.x, position.y, size ? size->w : image.rect_.w,
                    size ? size->h : image.rect_.h};
   SDL_Rect src = {

@@ -8,7 +8,9 @@ int main(int argc, char** argv) {
   // 在这里编写您的EnTT代码
 
   try {
-    Application app("entt_pacman");
+    Application::Init("entt_pacman");
+    auto& app = Application::GetInstance();
+    app.StartUp();
     app.Run();
   } catch (std::exception& e) {
     // The only exceptions we should get are from SDL

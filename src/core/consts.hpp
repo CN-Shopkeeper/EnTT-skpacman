@@ -5,14 +5,14 @@
 
 constexpr bool DebugMode = true;
 
-// constexpr SDL_Color KeyColor = {118, 66, 138, 255};
-// constexpr SDL_Color BlinkyColor = {255, 0, 0, 255};
-// constexpr SDL_Color PinkyColor = {255, 192, 203, 255};
-// constexpr SDL_Color InkyColor = {0, 255, 255, 255};
-// constexpr SDL_Color ClydeColor = {255, 127, 80, 255};
-// constexpr SDL_Color FrightenedColor = {0, 0, 255, 255};
-// constexpr SDL_Color InvincibleColor = {255, 0, 0, 255};
-// constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
+constexpr SDL_Color KeyColor = {118, 66, 138, 255};
+constexpr SDL_Color BlinkyColor = {255, 0, 0, 255};
+constexpr SDL_Color PinkyColor = {255, 192, 203, 255};
+constexpr SDL_Color InkyColor = {0, 255, 255, 255};
+constexpr SDL_Color ClydeColor = {255, 127, 80, 255};
+constexpr SDL_Color FrightenedColor = {0, 0, 255, 255};
+constexpr SDL_Color InvincibleColor = {255, 0, 0, 255};
+constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
 
 // tilesheet
 
@@ -61,27 +61,3 @@ constexpr int Framerate = 33;
 constexpr float FrameTime = 1000.f / Framerate;
 
 constexpr Coor outsideHouse[2] = {{14, 10}, {15, 10}};
-
-// 彩蛋相关
-
-// 彩蛋按键
-
-// 左上角
-// constexpr std::array<SDL_Scancode, 6> UpLeftScancode = {
-//     SDL_SCANCODE_W, SDL_SCANCODE_A, SDL_SCANCODE_W,
-//     SDL_SCANCODE_A, SDL_SCANCODE_W, SDL_SCANCODE_A};
-// constexpr std::array<SDL_Scancode, 6> UpRightScancode = {
-//     SDL_SCANCODE_W, SDL_SCANCODE_D, SDL_SCANCODE_W,
-//     SDL_SCANCODE_D, SDL_SCANCODE_W, SDL_SCANCODE_D};
-// constexpr std::array<SDL_Scancode, 6> DownLeftScancode = {
-//     SDL_SCANCODE_S, SDL_SCANCODE_A, SDL_SCANCODE_S,
-//     SDL_SCANCODE_A, SDL_SCANCODE_S, SDL_SCANCODE_A};
-// constexpr std::array<SDL_Scancode, 6> DownRightScancode = {
-//     SDL_SCANCODE_S, SDL_SCANCODE_D, SDL_SCANCODE_S,
-//     SDL_SCANCODE_D, SDL_SCANCODE_S, SDL_SCANCODE_D};
-
-// 内测人员名单
-constexpr std::string_view testerList[] = {"shear and his Queen",
-                                           "colin_008 & satori", "TX7 & Lynn00",
-                                           "Crystal & M-thor"};
-constexpr int TextWidth[] = {152, 144, 96, 128};

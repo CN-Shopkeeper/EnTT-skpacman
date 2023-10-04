@@ -6,16 +6,17 @@
 
 class Maze final {
  public:
+  std::unique_ptr<Matrix<Tile>> tiles;
+
   Maze(std::string_view desc, const Size& size);
-  static std::string GenerateMap(int& beanCount);
+  static std::string GenerateMap(int& beanCount,
+                                 std::optional<int> seed = std::nullopt);
 
-  const Tile& GetTile(int x, int y) const { return tiles_->Get(x, y); }
-  const Tile& GetTile(Coor cor) const { return tiles_->Get(cor.x, cor.y); }
-  Tile& GetTile(Coor cor) { return tiles_->Get(cor.x, cor.y); }
-  int Width() const { return tiles_->Width(); }
-  int Height() const { return tiles_->Height(); }
-
-  void Draw();
+  const Tile& GetTile(int x, int y) const { return tiles->Get(x, y); }
+  const Tile& GetTile(Coor cor) const { return tiles->Get(cor.x, cor.y); }
+  Tile& GetTile(Coor cor) { return tiles->Get(cor.x, cor.y); }
+  int Width() const { return tiles->Width(); }
+  int Height() const { return tiles->Height(); }
 
   // 坐标是否在地图内
   bool IsInside(int x, int y) const {
@@ -25,5 +26,4 @@ class Maze final {
   bool IsInside(Coor cor) const { return IsInside(cor.x, cor.y); }
 
  private:
-  std::unique_ptr<Matrix<Tile>> tiles_;
 };
