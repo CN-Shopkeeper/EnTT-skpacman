@@ -17,12 +17,12 @@ GhostCollision PlayerGhostCollide(entt::registry& reg) {
   for (const entt::entity p : pacmans) {
     const Pos pacmanPos = pacmans.get<Position>(p).p;
     const Direction pacmanDir = pacmans.get<MovingDir>(p).d;
-    const Rect pacmanRect = Rect{pacmanPos, {TileSize, TileSize}};
+    const Rect pacmanRect = Rect{pacmanPos};
     for (const entt::entity g : ghosts) {
       const Pos ghostPos = ghosts.get<Position>(g).p;
       const Direction ghostDir = ghosts.get<MovingDir>(g).d;
 
-      const Rect ghostRect = Rect{ghostPos, {TileSize, TileSize}};
+      const Rect ghostRect = Rect{ghostPos};
       if (pacmanRect.IsIntersect(ghostRect)) {
         if (reg.all_of<ScaredMode>(g) && !DebugMode) {
           return {g, GhostCollision::Type::eat};

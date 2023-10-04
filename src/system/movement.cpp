@@ -26,7 +26,7 @@ void Moving(entt::registry &reg, const Maze &maze) {
       movingDir = intentionDir;
       move(movement, position, DirToPos(movingDir, movement.speed));
     } else {
-      auto posCenter = Rect{position.p, {TileSize, TileSize}}.Center();
+      auto posCenter = Rect{position.p}.Center();
       auto tileCoor = PosToCoor(position.p);
       auto tileX = tileCoor.x;
       auto tileY = tileCoor.y;
@@ -68,7 +68,7 @@ void WallCollide(entt::registry &reg, const Maze &maze) {
     const Direction intentionDir = view.get<IntentionDir>(e).d;
     auto &movement = view.get<Movement>(e);
     const auto velocity = movement.offset;
-    auto posRect = Rect{position.p, {TileSize, TileSize}};
+    auto posRect = Rect{position.p};
     auto posCenter = posRect.Center();
     int cx = posCenter.x / TileSize;
     int cy = posCenter.y / TileSize;
@@ -79,7 +79,7 @@ void WallCollide(entt::registry &reg, const Maze &maze) {
         if (!maze.IsInside(x, y)) {
           continue;
         }
-        Rect tileRect(Pos(x * TileSize, y * TileSize), {TileSize, TileSize});
+        Rect tileRect(Pos(x * TileSize, y * TileSize));
         if (maze.GetTile(x, y) == Tile::Wall && tileRect.IsIntersect(posRect)) {
           posCenter = posRect.Center();
           auto tileCenter = tileRect.Center();
@@ -89,7 +89,7 @@ void WallCollide(entt::registry &reg, const Maze &maze) {
               maxIntersectV - Vector2(std::abs(dir.x), std ::abs(dir.y));
           auto seperate = (velocity * -1).Normalize<float>() * intersectDepth;
           move(movement, position, seperate);
-          posRect = Rect(position.p, {TileSize, TileSize});
+          posRect = Rect(position.p);
         }
       }
     }

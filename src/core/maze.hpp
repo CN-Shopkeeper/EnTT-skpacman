@@ -17,12 +17,6 @@ class Maze final {
 
   void Draw();
 
-  // 返回从终点到起点的路径
-  std::vector<Coor> ShortestPathBetweenTiles(Coor source, Coor target);
-
-  // 找寻最近可到达的tile
-  Coor NearestAccessibleTile(Coor target);
-
   // 坐标是否在地图内
   bool IsInside(int x, int y) const {
     return x >= 0 && x < Width() && y >= 0 && y < Height();

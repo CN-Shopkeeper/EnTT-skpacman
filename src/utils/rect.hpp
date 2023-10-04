@@ -1,5 +1,6 @@
 #pragma once
 
+#include "core/consts.hpp"
 #include "pch.hpp"
 #include "vector2.hpp"
 
@@ -16,7 +17,7 @@ class Rect final {
     };
   };
 
-  Rect(const Pos& pos, const Size& size) {
+  Rect(const Pos& pos, const Size& size = {TileSize, TileSize}) {
     this->_.position = pos;
     this->_.size = size;
   }

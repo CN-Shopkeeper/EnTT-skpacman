@@ -14,7 +14,8 @@ constexpr bool DebugMode = true;
 // constexpr SDL_Color InvincibleColor = {255, 0, 0, 255};
 // constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
 
-constexpr float Scale = 1.5;
+// tilesheet
+
 inline std::string TilesheetName = "tilesheet";
 constexpr int TilesheetCol = 7;
 constexpr int TilesheetRow = 1;
@@ -29,28 +30,6 @@ enum class ImageTileType {
   GhostDoor,
 };
 
-// NOTE: edit your map here
-constexpr std::string_view MapDesc =
-    "WWWWWWWWWW"
-    "WBBBBBBBBW"
-    "WWBWGWBWWW"
-    "WPBW WBWPW"
-    "WPBWWWBWPW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWBBBBBBBW"
-    "WWWWWWWWWW";
-
-constexpr std::string_view Tips =
-    "Tips:\n"
-    "WASD -> Action\n"
-    "R -> Restart\n"
-    "P -> Pause\n";
-
 // 界面相关
 
 constexpr size_t tetrisHeight = 9, tetrisWidth = 5;
@@ -58,19 +37,14 @@ constexpr size_t tetrisHeight = 9, tetrisWidth = 5;
 constexpr int MapWidth = tetrisWidth * 3 * 2;
 constexpr int MapHeight = tetrisHeight * 3 + 2;
 
-constexpr size_t TileSize = 24;
-constexpr size_t TipsWidth = 160;
-constexpr size_t RankingListWidth = 160;
+constexpr size_t TileSize = 16;
 
 constexpr size_t WindowHeight = TileSize * MapHeight;
-constexpr size_t WindowWidth =
-    TileSize * MapWidth + TipsWidth + RankingListWidth;
+constexpr size_t WindowWidth = TileSize * MapWidth;
 
-constexpr size_t PacmanInitX = (TileSize * MapWidth) / 2 - TileSize;
-constexpr size_t PacmanInitY = (7 * 3 + 1) * TileSize;
+constexpr Coor PacmanInitCoor = {MapWidth / 2 - 1, 7 * 3 + 1};
 
-constexpr size_t GhostInitX = (TileSize * MapWidth) / 2 - TileSize * 2;
-constexpr size_t GhostInitY = (4 * 3 + 1) * TileSize;
+constexpr Coor GhostInitCoor = {MapWidth / 2 - 2, 4 * 3 + 1};
 
 // 游戏机制相关
 
