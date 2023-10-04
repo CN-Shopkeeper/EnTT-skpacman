@@ -18,7 +18,6 @@ void EnterHouse(entt::registry &reg) {
       reg.view<EnteringHouse, Position, HomePosition, MovingDir, Movement>();
   for (const entt::entity e : view) {
     const Direction movingDir = view.get<MovingDir>(e).d;
-    const Pos pos = view.get<Position>(e).p;
     const float speed = view.get<Movement>(e).speed;
     if (ReachTheTile(reg, e, view.get<HomePosition>(e).home)) {
       reg.remove<EnteringHouse>(e);
@@ -31,8 +30,8 @@ void EnterHouse(entt::registry &reg) {
 
 void LeaveHouse(entt::registry &reg) {
   auto view = reg.view<LeavingHouse, Position, Target>();
-  auto outsideHouse0 = GetTheCenter(outsideHouse[0]);
-  auto outsideHouse1 = GetTheCenter(outsideHouse[1]);
+  auto outsideHouse0 = GetTheAnchor(outsideHouse[0]);
+  auto outsideHouse1 = GetTheAnchor(outsideHouse[1]);
   for (const entt::entity e : view) {
     if (view.get<Position>(e).p == outsideHouse0 ||
         view.get<Position>(e).p == outsideHouse1) {

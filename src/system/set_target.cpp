@@ -43,7 +43,7 @@ void SetPinkyChaseTarget(entt::registry &reg, Maze &maze) {
         ShortestPathBetweenCoors(reg, maze, e, targetCoor, PosToCoor(ghostPos));
 
     auto &target = view.get<Target>(e);
-    target.p = GetTheCenter(targetCoor);
+    target.p = GetTheAnchor(targetCoor);
     target.path = path;
   }
 }
@@ -68,7 +68,7 @@ void SetInkyChaseTarget(entt::registry &reg, Maze &maze) {
         ShortestPathBetweenCoors(reg, maze, e, targetCoor, ghostCoor);
 
     auto &target = view.get<Target>(e);
-    target.p = GetTheCenter(targetCoor);
+    target.p = GetTheAnchor(targetCoor);
     target.path = path;
   }
 }
@@ -90,7 +90,7 @@ void SetClydeChaseTarget(entt::registry &reg, Maze &maze) {
       target.path = path;
     } else {
       // ? 是吗
-      view.get<Target>(e).p = GetTheCenter(view.get<HomePosition>(e).scatter);
+      view.get<Target>(e).p = GetTheAnchor(view.get<HomePosition>(e).scatter);
       path = ShortestPathBetweenCoors(
           reg, maze, e, view.get<HomePosition>(e).scatter, ghostCoor);
       target.path = path;
@@ -113,7 +113,7 @@ void SetScatterTarget(entt::registry &reg, Maze &maze) {
     }
 
     auto &target = view.get<Target>(e);
-    target.p = GetTheCenter(view.get<HomePosition>(e).scatter);
+    target.p = GetTheAnchor(view.get<HomePosition>(e).scatter);
     if (scatterInfo.reach) {
       const Coor nextRotate = scatterInfo.rotateCCW
                                   ? DirToCoor(rotateCCW(movingDir))
@@ -165,7 +165,7 @@ void SetEatenTarget(entt::registry &reg, Maze &maze) {
   auto view = reg.view<Position, Target, EatenMode, HomePosition>();
   for (const entt::entity e : view) {
     const Pos pos = view.get<Position>(e).p;
-    view.get<Target>(e).p = GetTheCenter(view.get<HomePosition>(e).home);
+    view.get<Target>(e).p = GetTheAnchor(view.get<HomePosition>(e).home);
     view.get<Target>(e).path = ShortestPathBetweenCoors(
         reg, maze, e, view.get<HomePosition>(e).home, PosToCoor(pos));
   }

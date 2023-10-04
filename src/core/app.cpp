@@ -60,6 +60,8 @@ void Application::Run() {
         // game.input(e.key.keysym.scancode);
       }
     }
+    renderer->SetColor(SDL_Color{0, 0, 0, 255});
+    renderer->Clear();
     GameContext::GetInstance().Render();
     renderer->Present();
     SDL_Delay(30);

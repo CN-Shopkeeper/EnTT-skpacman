@@ -20,6 +20,10 @@ inline Pos GetTheCenter(const Coor coor, int tileSize = TileSize) {
       .Center();
 }
 
+inline Pos GetTheAnchor(const Coor coor, int tileSize = TileSize) {
+  return {coor.x * tileSize * 1.f, coor.y * tileSize * 1.f};
+}
+
 inline bool ReachCenter(entt::registry &reg, entt::entity e,
                         float threshold = 0.5f, float offset = 0.0f,
                         int tileSize = TileSize) {

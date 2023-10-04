@@ -1,16 +1,30 @@
 #include "game.hpp"
 
+#include "app.hpp"
+#include "component/house.hpp"
+#include "factory.hpp"
+#include "system/bfs.hpp"
 #include "system/render.hpp"
-
 GameContext::GameContext()
     : maze(Maze{Maze::GenerateMap(beanCount), {MapWidth, MapHeight}}) {
-  // const entt::entity player = makePlayer(reg);
-  // const entt::entity blinky = makeBlinky(reg, player);
-  // makePinky(reg, player);
-  // makeInky(reg, player, blinky);
-  // makeClyde(reg, player);
-  // // seeding a pseudo random number generator with a random source
-  // rand.seed(std::random_device{}());
+  auto tilesheet =
+      Application::GetInstance().textureManager->FindTilesheet(TilesheetName);
+  const entt::entity pacman = MakePacman(
+      reg, {tilesheet->Get(static_cast<int>(ImageTileType::Pacman), 0),
+            tilesheet->Get(static_cast<int>(ImageTileType::PacmanEat), 0)});
+  const entt::entity blinky = MakeBlinky(
+      reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0), pacman);
+  const entt::entity pinky = MakePinky(
+      reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0), pacman);
+  MakeInky(reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0),
+           pacman, blinky);
+  MakeClyde(reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0),
+            pacman);
+
+  reg.emplace<LeavingHouse>(blinky);
+  reg.emplace<LeavingHouse>(pinky);
+  // seeding a pseudo random number generator with a random source
+  rand.seed(std::random_device{}());
 }
 
 // void GameContext::input(const SDL_Scancode key) {
@@ -90,6 +104,8 @@ GameContext::GameContext()
 
 void GameContext::Render() {
   RenderMap(maze);
+  RenderPacman(reg);
+  RenderGhost(reg);
   // if (state == State::won) {
   //   fullRender(writer, animera::SpriteID::win);
   // } else if (state == State::lost) {

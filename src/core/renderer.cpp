@@ -22,13 +22,15 @@ void Renderer::DrawTexture(Texture& texture, const SDL_Rect& rect, int x,
 }
 
 void Renderer::DrawImage(const Image& image, const Pos& position,
-                         const std::optional<Size>& size ) {
+                         const std::optional<Size>& size) {
   SDL_FRect dst = {position.x, position.y, size ? size->w : image.rect_.w,
                    size ? size->h : image.rect_.h};
   SDL_Rect src = {
       static_cast<int>(image.rect_.x), static_cast<int>(image.rect_.y),
       static_cast<int>(image.rect_.w), static_cast<int>(image.rect_.h)};
-  SDL_RenderCopyF(renderer.get(), image.texture_.texture_.get(), &src, &dst);
+  auto texture = image.texture_.texture_.get();
+  SDL_SetTextureColorMod(texture, image.color.r, image.color.g, image.color.b);
+  SDL_RenderCopyF(renderer.get(), texture, &src, &dst);
 }
 
 void Renderer::DrawImage(const Image& image, const Pos& position,
@@ -44,8 +46,8 @@ void Renderer::DrawImage(const Image& image, const Pos& position,
   flip |= scale.y < 0 ? SDL_RendererFlip::SDL_FLIP_VERTICAL : 0;
   auto texture = image.texture_.texture_.get();
   SDL_SetTextureColorMod(texture, image.color.r, image.color.g, image.color.b);
-  SDL_RenderCopyExF(renderer.get(), image.texture_.texture_.get(), &src, &dst,
-                    rotation, nullptr, static_cast<SDL_RendererFlip>(flip));
+  SDL_RenderCopyExF(renderer.get(), texture, &src, &dst, rotation, nullptr,
+                    static_cast<SDL_RendererFlip>(flip));
 }
 void Renderer::DrawPath(const std::unique_ptr<SDL_Point[]>& path,
                         const SDL_Color& color, int count) {
