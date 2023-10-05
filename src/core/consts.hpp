@@ -10,7 +10,7 @@ constexpr SDL_Color BlinkyColor = {255, 0, 0, 255};
 constexpr SDL_Color PinkyColor = {255, 192, 203, 255};
 constexpr SDL_Color InkyColor = {0, 255, 255, 255};
 constexpr SDL_Color ClydeColor = {255, 127, 80, 255};
-constexpr SDL_Color FrightenedColor = {0, 0, 255, 255};
+constexpr SDL_Color ScaredColor = {0, 0, 255, 255};
 constexpr SDL_Color InvincibleColor = {255, 0, 0, 255};
 constexpr SDL_Color WhiteColor = {255, 255, 255, 255};
 

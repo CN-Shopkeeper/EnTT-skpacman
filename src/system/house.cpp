@@ -17,7 +17,6 @@ void EnterHouse(entt::registry &reg) {
   const auto view =
       reg.view<EnteringHouse, Position, HomePosition, MovingDir, Movement>();
   for (const entt::entity e : view) {
-    const Direction movingDir = view.get<MovingDir>(e).d;
     const float speed = view.get<Movement>(e).speed;
     if (ReachTheTile(reg, e, view.get<HomePosition>(e).home)) {
       reg.remove<EnteringHouse>(e);

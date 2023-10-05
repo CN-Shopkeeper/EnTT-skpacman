@@ -36,6 +36,7 @@ add_executable(${GAME_NAME} ${SRC} ${HEADER})
 target_include_directories(${GAME_NAME} PRIVATE src)
 target_link_libraries(${GAME_NAME} PRIVATE SDL2)
 target_compile_features(${GAME_NAME} PRIVATE cxx_std_17)
+target_precompile_headers(${GAME_NAME} PRIVATE src/pch.hpp)
 
 CopyResources(${GAME_NAME})
 CopyDLL(${GAME_NAME})

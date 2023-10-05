@@ -70,6 +70,7 @@ bool GameContext::Update() {
   beanEaten += EatBeans(reg, maze);
   if (EatPowerBean(reg, maze)) {
     beanEaten++;
+    energizedFrame = ghostScaredTime * Framerate;
     GhostScared(reg);
   }
   EnterHouse(reg);

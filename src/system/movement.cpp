@@ -3,6 +3,7 @@
 #include <entt/entity/registry.hpp>
 
 #include "component/dir.hpp"
+#include "component/ghost_mode.hpp"
 #include "system/can_move.hpp"
 #include "utils/dir.hpp"
 #include "utils/pos_coor.hpp"
@@ -12,9 +13,20 @@ void move(Movement &movement, Position &position, Pos offset) {
   position.p += offset;
 }
 
+void setSpeed(entt::registry &reg, entt::entity e) {
+  if (reg.all_of<ScaredMode>(e)) {
+    reg.get<Movement>(e).speed = 2.f;
+  } else if (reg.all_of<EatenMode>(e)) {
+    reg.get<Movement>(e).speed = 8.f;
+  } else {
+    reg.get<Movement>(e).speed = 4.f;
+  }
+}
+
 void Moving(entt::registry &reg, const Maze &maze) {
   auto view = reg.view<Position, MovingDir, IntentionDir, Movement>();
   for (const entt::entity e : view) {
+    setSpeed(reg, e);
     Position &position = view.get<Position>(e);
     Direction &movingDir = view.get<MovingDir>(e).d;
     const Direction intentionDir = view.get<IntentionDir>(e).d;

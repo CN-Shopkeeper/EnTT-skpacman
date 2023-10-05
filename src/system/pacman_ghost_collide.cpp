@@ -13,7 +13,7 @@
 
 GhostCollision PacmanGhostCollide(entt::registry& reg) {
   const auto pacmans = reg.view<Pacman, Position, MovingDir>();
-  const auto ghosts = reg.view<Pacman, Position, MovingDir>();
+  const auto ghosts = reg.view<Ghost, Position, MovingDir>();
   for (const entt::entity p : pacmans) {
     const Pos pacmanPos = pacmans.get<Position>(p).p;
     const Direction pacmanDir = pacmans.get<MovingDir>(p).d;
@@ -24,7 +24,7 @@ GhostCollision PacmanGhostCollide(entt::registry& reg) {
 
       const Rect ghostRect = Rect{ghostPos};
       if (pacmanRect.IsIntersect(ghostRect)) {
-        if (reg.all_of<ScaredMode>(g) && !DebugMode) {
+        if (reg.all_of<ScaredMode>(g)) {
           return {g, GhostCollision::Type::eat};
         } else if (reg.all_of<EatenMode>(g)) {
           continue;

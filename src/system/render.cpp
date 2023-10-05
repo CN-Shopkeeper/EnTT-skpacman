@@ -1,6 +1,8 @@
 #include "render.hpp"
 
 #include "component/dir.hpp"
+#include "component/ghost_mode.hpp"
+#include "component/pacman_mode.hpp"
 #include "component/position.hpp"
 #include "component/sprite.hpp"
 #include "core/app.hpp"
@@ -38,8 +40,7 @@ void RenderPacman(entt::registry& reg) {
     }
 
     auto& renderer = Application::GetInstance().renderer;
-    renderer->DrawImage(iamge, pos , scale,
-                        rotation);
+    renderer->DrawImage(iamge, pos, scale, rotation);
   }
 }
 
@@ -59,10 +60,15 @@ void RenderGhost(entt::registry& reg) {
     if (movingDir == Direction::Down) {
       rotation = 90;
     }
-    // todo set color
-    sprite.image.color = sprite.color;
+    
+    if (reg.all_of<ScaredMode>(e)) {
+      sprite.image.color = ScaredColor;
+    } else if (reg.all_of<EatenMode>(e)) {
+      sprite.image.color = WhiteColor;
+    } else {
+      sprite.image.color = sprite.color;
+    }
     auto& renderer = Application::GetInstance().renderer;
-    renderer->DrawImage(sprite.image, pos,
-                        scale, rotation);
+    renderer->DrawImage(sprite.image, pos, scale, rotation);
   }
 }

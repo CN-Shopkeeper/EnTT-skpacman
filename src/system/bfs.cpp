@@ -1,6 +1,7 @@
 #include "bfs.hpp"
 
 #include "component/position.hpp"
+#include "utils/pos_coor.hpp"
 
 std::vector<Coor> ShortestPathBetweenCoors(entt::registry& reg,
                                            const Maze& maze, entt::entity g,
@@ -8,8 +9,7 @@ std::vector<Coor> ShortestPathBetweenCoors(entt::registry& reg,
   auto& sTile = maze.GetTile(source);
   auto& tTile = maze.GetTile(target);
   std::vector<Coor> result;
-  if (sTile == Tile::Wall || sTile == Tile::GhostDoor || tTile == Tile::Wall ||
-      tTile == Tile::GhostDoor) {
+  if (!CanMove(reg, maze, g, source) || !CanMove(reg, maze, g, target)) {
     // 起点或终点不可到达，直接返回空向量
     return result;
   }
