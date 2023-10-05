@@ -29,7 +29,7 @@ std::optional<Direction> readDir(const SDL_Scancode key) {
 
 }  // namespace
 
-bool playerInput(entt::registry &reg, const SDL_Scancode key) {
+bool PlayerInput(entt::registry &reg, const SDL_Scancode key) {
   const auto dirOpt = readDir(key);
   if (!dirOpt.has_value()) {
     return false;

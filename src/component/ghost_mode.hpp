@@ -11,4 +11,5 @@ struct ScaredMode {
   // handled by the change_ghost_mode systems
   int frameToGo = ghostScaredTime * Framerate;
 };
+// EatenMode可以与ChaseMode和ScatterMode同时存在
 struct EatenMode {};

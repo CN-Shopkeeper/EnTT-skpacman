@@ -19,7 +19,7 @@ entt::entity MakePacman(entt::registry &reg, std::array<Image, 2> images) {
   reg.emplace<MovingDir>(e, Direction::Right);
   reg.emplace<IntentionDir>(e, Direction::Right);
   reg.emplace<Position>(e, GetTheAnchor(PacmanInitCoor));
-  reg.emplace<Movement>(e, 5.0f, Pos{0, 0});
+  reg.emplace<Movement>(e, 4.0f, Pos{0, 0});
   reg.emplace<PacmanSprite>(e, images);
   return e;
 }
@@ -35,6 +35,7 @@ entt::entity makeGhost(entt::registry &reg, const Coor home, const Coor scatter,
   reg.emplace<IntentionDir>(e);
   reg.emplace<MovingDir>(e);
   reg.emplace<Target>(e);
+  reg.emplace<Movement>(e, 4.0f, Pos{0, 0});
   reg.emplace<Ghost>(e);
   reg.emplace<GhostSprite>(e, image, color);
   return e;

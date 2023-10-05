@@ -1,11 +1,14 @@
+#include "change_monster_mode.hpp"
+
 #include <entt/entity/registry.hpp>
 
-#include "change_ghost_mode.hpp"
 #include "component/ghost.hpp"
 #include "component/ghost_mode.hpp"
 #include "component/house.hpp"
+#include "component/pacman.hpp"
+#include "component/pacman_mode.hpp"
 
-void ghostScared(entt::registry &reg) {
+void GhostScared(entt::registry &reg) {
   const auto view = reg.view<Ghost>();
   for (const entt::entity e : view) {
     reg.remove<ChaseMode, ScatterMode, ScaredMode>(e);
@@ -16,7 +19,18 @@ void ghostScared(entt::registry &reg) {
   }
 }
 
-void ghostScaredTimeout(entt::registry &reg) {
+void PacmanInvincibleTimeout(entt::registry &reg) {
+  auto view = reg.view<Pacman, InvincibleMode>();
+  for (const entt::entity e : view) {
+    InvincibleMode &invincible = view.get<InvincibleMode>(e);
+    --invincible.frameToGo;
+    if (invincible.frameToGo <= 0) {
+      reg.remove<InvincibleMode>(e);
+    }
+  }
+}
+
+void GhostScaredTimeout(entt::registry &reg) {
   auto view = reg.view<Ghost, ScaredMode>();
   for (const entt::entity e : view) {
     ScaredMode &scared = view.get<ScaredMode>(e);
@@ -30,13 +44,13 @@ void ghostScaredTimeout(entt::registry &reg) {
   }
 }
 
-void ghostEaten(entt::registry &reg, const entt::entity ghost) {
+void GhostEaten(entt::registry &reg, const entt::entity ghost) {
   reg.remove<ScaredMode>(ghost);
   reg.emplace<EatenMode>(ghost);
   reg.emplace<EnteringHouse>(ghost);
 }
 
-void ghostScatter(entt::registry &reg) {
+void GhostScatter(entt::registry &reg) {
   const auto view = reg.view<Ghost, ChaseMode>();
   for (const entt::entity e : view) {
     reg.remove<ChaseMode>(e);
@@ -44,7 +58,7 @@ void ghostScatter(entt::registry &reg) {
   }
 }
 
-void ghostChase(entt::registry &reg) {
+void GhostChase(entt::registry &reg) {
   const auto view = reg.view<Ghost, ScatterMode>();
   for (const entt::entity e : view) {
     reg.remove<ScatterMode>(e);

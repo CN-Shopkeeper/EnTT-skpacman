@@ -9,14 +9,22 @@ class GameContext : public Singlton<GameContext> {
   void Input(SDL_Scancode);
   bool Update();
   void Render();
+  int GetElapsedGameTime() const {
+    return static_cast<int>(std::floor(gameFrame * FrameTime / 1000));
+  }
 
  private:
   enum class State { playing, won, lost };
 
   entt::registry reg;
-  Maze maze;
   int beanCount = 0;
+  Maze maze;
+  int beanEaten = 0;
+  int lifeRemains = 3;
   std::mt19937 rand;
   State state = State::playing;
-  int ticks = 0;
+  int globalFrame = 0;
+  int gameFrame = 0;
+  int energizedFrame = 0;
+  int multiKillReward = MultiKillReward;
 };

@@ -48,6 +48,7 @@ void Application::ShutDown() {}
 
 void Application::Run() {
   GameContext::Init();
+  auto& gameCtx = GameContext::GetInstance();
   int frame = 0;
   bool quit = false;
   while (!quit) {
@@ -57,12 +58,15 @@ void Application::Run() {
         quit = true;
         break;
       } else if (e.type == SDL_KEYDOWN) {
-        // game.input(e.key.keysym.scancode);
+        gameCtx.Input(e.key.keysym.scancode);
       }
     }
+
+    gameCtx.Update();
+
     renderer->SetColor(SDL_Color{0, 0, 0, 255});
     renderer->Clear();
-    GameContext::GetInstance().Render();
+    gameCtx.Render();
     renderer->Present();
     SDL_Delay(30);
 

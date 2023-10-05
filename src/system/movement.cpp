@@ -32,21 +32,19 @@ void Moving(entt::registry &reg, const Maze &maze) {
       auto tileY = tileCoor.y;
       auto tileCenter = GetTheCenter(tileCoor);
       auto diff = tileCenter - posCenter;
-      auto reach = ReachCenter(reg, e, 0.6f, 0.4f);
+      auto reach = ReachCenter(reg, e, 1.0f, 0.4f);
       bool should = false;
 
       if (reach) {
         const int dirOffset = 1.5 - static_cast<int>(intentionDir) > 0 ? 1 : -1;
         if (movingDir == Direction::Left || movingDir == Direction::Right) {
           if (maze.IsInside(tileX, tileY + dirOffset)) {
-            should =
-                CanMove(reg, maze, e, {tileX, (tileY + dirOffset)}, movingDir);
+            should = CanMove(reg, maze, e, {tileX, (tileY + dirOffset)});
           }
         }
         if (movingDir == Direction::Up || movingDir == Direction::Down) {
           if (maze.IsInside(tileX + dirOffset, tileY)) {
-            should =
-                CanMove(reg, maze, e, {(tileX + dirOffset), tileY}, movingDir);
+            should = CanMove(reg, maze, e, {(tileX + dirOffset), tileY});
           }
         }
       }
@@ -64,7 +62,7 @@ void Moving(entt::registry &reg, const Maze &maze) {
 void WallCollide(entt::registry &reg, const Maze &maze) {
   auto view = reg.view<Position, MovingDir, IntentionDir, Movement>();
   for (const entt::entity e : view) {
-    Position position = view.get<Position>(e);
+    Position &position = view.get<Position>(e);
     const Direction intentionDir = view.get<IntentionDir>(e).d;
     auto &movement = view.get<Movement>(e);
     const auto velocity = movement.offset;

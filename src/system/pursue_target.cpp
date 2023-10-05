@@ -19,8 +19,8 @@ Direction getDirectionFromPath(const std::vector<Coor> &path,
   int offsetX;
   int offsetY;
   if (path.size() == 1) {
-    offsetX = path[0].x;
-    offsetY = path[0].y;
+    offsetX = -path[0].x;
+    offsetY = -path[0].y;
   } else {
     offsetX = path[0].x - path[1].x;
     offsetY = path[0].y - path[1].y;

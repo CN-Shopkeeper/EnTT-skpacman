@@ -5,7 +5,6 @@
 std::vector<Coor> ShortestPathBetweenCoors(entt::registry& reg,
                                            const Maze& maze, entt::entity g,
                                            Coor source, Coor target) {
-  const auto movingDir = reg.get<MovingDir>(g).d;
   auto& sTile = maze.GetTile(source);
   auto& tTile = maze.GetTile(target);
   std::vector<Coor> result;
@@ -40,23 +39,19 @@ std::vector<Coor> ShortestPathBetweenCoors(entt::registry& reg,
      * down.
      * 调整四个方向入队顺序（反向的），down > right > up
      */
-    if (!visited[x + (y + 1) * MapWidth] &&
-        CanMove(reg, maze, g, {x, y + 1}, movingDir)) {
+    if (!visited[x + (y + 1) * MapWidth] && CanMove(reg, maze, g, {x, y + 1})) {
       vec.push_back({x, y + 1, now.step + 1, index});
       visited[x + (y + 1) * MapWidth] = true;
     }
-    if (!visited[x + 1 + y * MapWidth] &&
-        CanMove(reg, maze, g, {x + 1, y}, movingDir)) {
+    if (!visited[x + 1 + y * MapWidth] && CanMove(reg, maze, g, {x + 1, y})) {
       vec.push_back({x + 1, y, now.step + 1, index});
       visited[x + 1 + y * MapWidth] = true;
     }
-    if (!visited[x + (y - 1) * MapWidth] &&
-        CanMove(reg, maze, g, {x, y - 1}, movingDir)) {
+    if (!visited[x + (y - 1) * MapWidth] && CanMove(reg, maze, g, {x, y - 1})) {
       vec.push_back({x, y - 1, now.step + 1, index});
       visited[x + (y - 1) * MapWidth] = true;
     }
-    if (!visited[(x - 1) + y * MapWidth] &&
-        CanMove(reg, maze, g, {x - 1, y}, movingDir)) {
+    if (!visited[(x - 1) + y * MapWidth] && CanMove(reg, maze, g, {x - 1, y})) {
       vec.push_back({x - 1, y, now.step + 1, index});
       visited[x - 1 + y * MapWidth] = true;
     }
@@ -88,14 +83,13 @@ void NStepAhead(entt::registry& reg, const Maze& maze, entt::entity pacman,
       break;
     }
     if (CanMove(reg, maze, pacman,
-                {now.x + pacmanMovingCoor.x, now.y + pacmanMovingCoor.y},
-                pacmanMovingDir)) {
+                {now.x + pacmanMovingCoor.x, now.y + pacmanMovingCoor.y})) {
       queue.push({now.x + pacmanMovingCoor.x, now.y + pacmanMovingCoor.y,
                   now.step + 1, 0});
     }
-    if (CanMove(reg, maze, pacman,
-                {now.x + pacmanIntentionCoor.x, now.y + pacmanIntentionCoor.y},
-                pacmanMovingDir)) {
+    if (CanMove(
+            reg, maze, pacman,
+            {now.x + pacmanIntentionCoor.x, now.y + pacmanIntentionCoor.y})) {
       queue.push({now.x + pacmanIntentionCoor.x, now.y + pacmanIntentionCoor.y,
                   now.step + 1, 0});
     }
@@ -104,7 +98,6 @@ void NStepAhead(entt::registry& reg, const Maze& maze, entt::entity pacman,
 
 Coor NearestAccessibleTileCoor(entt::registry& reg, const Maze& maze,
                                entt::entity g, Coor target) {
-  const auto movingDir = reg.get<MovingDir>(g).d;
   target.x = std::clamp(target.x, 0, MapWidth - 1);
   target.y = std::clamp(target.y, 0, MapHeight - 1);
   std::queue<BFSNode> queue;
@@ -115,7 +108,7 @@ Coor NearestAccessibleTileCoor(entt::registry& reg, const Maze& maze,
     auto& now = queue.front();
     queue.pop();
     const auto tile = maze.GetTile(now.x, now.y);
-    if (CanMove(reg, maze, g, {now.x, now.y}, movingDir)) {
+    if (CanMove(reg, maze, g, {now.x, now.y})) {
       // 找到了第一个可以到达的点
       return {now.x, now.y};
     }

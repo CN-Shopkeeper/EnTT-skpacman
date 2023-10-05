@@ -18,4 +18,4 @@ struct GhostCollision {
 // If the ghost is in eaten mode, the player will pass straight through the
 // ghost
 
-GhostCollision PlayerGhostCollide(entt::registry &);
+GhostCollision PacmanGhostCollide(entt::registry &);

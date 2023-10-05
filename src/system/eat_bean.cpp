@@ -20,7 +20,7 @@ int countConsumptions(entt::registry &reg, Maze &maze, const Tile food) {
     const Movement movement = view.get<Movement>(e);
     if (!maze.IsInside(coor) ||
         // 需要到达中心时才算吃到
-        !ReachCenter(reg, e, 0.6f)) {
+        !ReachCenter(reg, e, 1.0f)) {
       continue;
     }
     Tile &tile = maze.GetTile(PosToCoor(pos));

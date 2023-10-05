@@ -1,5 +1,3 @@
 #pragma once
 
-struct Pacman {
-  int lifeRemains = 3;
-};
+struct Pacman {};

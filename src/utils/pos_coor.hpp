@@ -10,8 +10,8 @@
 #include "vector2.hpp"
 
 inline Coor PosToCoor(const Pos pos, int tileSize = TileSize) {
-  return {static_cast<int>(pos.x / tileSize),
-          static_cast<int>(pos.y / tileSize)};
+  return {static_cast<int>((pos.x + tileSize / 2) / tileSize),
+          static_cast<int>((pos.y + tileSize / 2) / tileSize)};
 }
 
 inline Pos GetTheCenter(const Coor coor, int tileSize = TileSize) {
@@ -25,7 +25,7 @@ inline Pos GetTheAnchor(const Coor coor, int tileSize = TileSize) {
 }
 
 inline bool ReachCenter(entt::registry &reg, entt::entity e,
-                        float threshold = 0.5f, float offset = 0.0f,
+                        float threshold = 1.0f, float offset = 0.0f,
                         int tileSize = TileSize) {
   const Pos pos = reg.get<Position>(e).p;
   const Direction movingDir = reg.get<MovingDir>(e).d;
@@ -53,7 +53,7 @@ inline bool ReachCenter(entt::registry &reg, entt::entity e,
 }
 
 inline bool ReachTheTile(entt::registry &reg, entt::entity e,
-                         const Coor targetCoor, float threshold = 0.5f,
+                         const Coor targetCoor, float threshold = 1.0f,
                          float offset = 0.0f, int tileSize = TileSize) {
   const Pos pos = reg.get<Position>(e).p;
   return PosToCoor(pos) == targetCoor &&

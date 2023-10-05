@@ -6,18 +6,20 @@
 // mode will be put into scared mode. Ghosts that are already in scared mode
 // will have there scared timer extended
 // ?refreshed?
-void ghostScared(entt::registry &);
+void GhostScared(entt::registry &);
 
 // Ghosts in scared mode have a timer. When the timer runs out, they will enter
 // chase mode.
-void ghostScaredTimeout(entt::registry &);
+void GhostScaredTimeout(entt::registry &);
 
 // This is called when pacman collides with a ghost that is in scared mode.
 // This system puts the ghost into eaten mode
-void ghostEaten(entt::registry &, entt::entity);
+void GhostEaten(entt::registry &, entt::entity);
 
 // Puts all of the ghosts into scatter mode
-void ghostScatter(entt::registry &);
+void GhostScatter(entt::registry &);
 
 // Puts all of the ghost into chase mode
-void ghostChase(entt::registry &);
+void GhostChase(entt::registry &);
+
+void PacmanInvincibleTimeout(entt::registry &);

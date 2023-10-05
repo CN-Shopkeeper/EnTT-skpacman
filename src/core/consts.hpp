@@ -61,3 +61,4 @@ constexpr int Framerate = 33;
 constexpr float FrameTime = 1000.f / Framerate;
 
 constexpr Coor outsideHouse[2] = {{14, 10}, {15, 10}};
+constexpr Coor insideHouseRange[2] = {{12, 12}, {17, 14}};

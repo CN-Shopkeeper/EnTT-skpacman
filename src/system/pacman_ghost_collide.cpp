@@ -11,7 +11,7 @@
 #include "utils/dir.hpp"
 #include "utils/rect.hpp"
 
-GhostCollision PlayerGhostCollide(entt::registry& reg) {
+GhostCollision PacmanGhostCollide(entt::registry& reg) {
   const auto pacmans = reg.view<Pacman, Position, MovingDir>();
   const auto ghosts = reg.view<Pacman, Position, MovingDir>();
   for (const entt::entity p : pacmans) {
