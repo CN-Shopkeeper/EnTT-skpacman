@@ -58,6 +58,16 @@ void Application::Run() {
         quit = true;
         break;
       } else if (e.type == SDL_KEYDOWN) {
+        if (e.key.keysym.scancode == SDL_SCANCODE_R) {
+          gameCtx.NewGame();
+        }
+        if (e.key.keysym.scancode == SDL_SCANCODE_P) {
+          if (gameCtx.state == GameContext::State::playing) {
+            gameCtx.state = GameContext::State::pausing;
+          } else if (gameCtx.state == GameContext::State::pausing) {
+            gameCtx.state = GameContext::State::playing;
+          }
+        }
         gameCtx.Input(e.key.keysym.scancode);
       }
     }
@@ -68,20 +78,6 @@ void Application::Run() {
     renderer->Clear();
     gameCtx.Render();
     renderer->Present();
-    SDL_Delay(30);
-
-    // Game::logic is called once for each tile
-    // Game::render is called for each pixel between tiles
-    // if (frame % tileSize == 0) {
-    //   if (!game.logic()) {
-    //     quit = true;
-    //   }
-    // }
-
-    // SDL_CHECK(SDL_SetRenderDrawColor(renderer.get(), 0, 0, 0, 255));
-    // SDL_CHECK(SDL_RenderClear(renderer.get()));
-    // game.render(writer, frame % tileSize);
-    // ++frame;
-    // SDL_RenderPresent(renderer.get());
+    SDL_Delay(FrameTime);
   }
 }

@@ -70,3 +70,21 @@ entt::entity MakeClyde(entt::registry &reg, Image image, entt::entity pacman) {
   reg.emplace<PinkyChaseTarget>(e, pacman);
   return e;
 }
+
+void ResetPacman(entt::registry &reg, entt::entity e) {
+  reg.get<MovingDir>(e).d = Direction::Right;
+  reg.get<IntentionDir>(e).d = Direction::Right;
+  reg.get<Position>(e).p = GetTheAnchor(PacmanInitCoor);
+  reg.get<Movement>(e) = {4.0f, Pos{0, 0}};
+}
+
+void ResetGhost(entt::registry &reg, entt::entity e) {
+  reg.get<Position>(e).p = GetTheAnchor(reg.get<HomePosition>(e).home);
+  reg.remove<ScaredMode, ChaseMode, ScatterMode, EatenMode>(e);
+  reg.emplace<ScatterMode>(e);
+  reg.get<MovingDir>(e).d = Direction::Right;
+  reg.get<IntentionDir>(e).d = Direction::Right;
+  reg.remove<Movement>(e);
+  reg.emplace<Movement>(e, 4.0f, Pos{0, 0});
+  reg.remove<Target>(e);
+}

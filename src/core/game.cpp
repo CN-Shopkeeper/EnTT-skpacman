@@ -17,7 +17,7 @@ GameContext::GameContext()
     : maze(Maze{Maze::GenerateMap(beanCount), {MapWidth, MapHeight}}) {
   auto tilesheet =
       Application::GetInstance().textureManager->FindTilesheet(TilesheetName);
-  const entt::entity pacman = MakePacman(
+  pacman = MakePacman(
       reg, {tilesheet->Get(static_cast<int>(ImageTileType::Pacman), 0),
             tilesheet->Get(static_cast<int>(ImageTileType::PacmanEat), 0)});
   blinky = MakeBlinky(
@@ -117,7 +117,7 @@ bool GameContext::Update() {
 void GameContext::Render() {
   RenderMap(maze);
   RenderPacman(reg, globalFrame);
-  RenderGhost(reg, globalFrame );
+  RenderGhost(reg, globalFrame);
   if (state == State::won) {
     auto& renderer = Application::GetInstance().renderer;
     renderer->DrawTexture(
@@ -131,4 +131,24 @@ void GameContext::Render() {
         SDL_Rect{0, 0, 256, 256}, (WindowWidth - 256) / 2,
         (WindowHeight - 256) / 2);
   }
+}
+
+void GameContext::NewGame() {
+  maze = Maze{Maze::GenerateMap(beanCount), {MapWidth, MapHeight}};
+  beanEaten = 0;
+  lifeRemains = 3;
+  state = State::playing;
+  globalFrame = 0;
+  gameFrame = 0;
+  energizedFrame = 0;
+  multiKillReward = MultiKillReward;
+  score = 0;
+
+  ResetPacman(reg, pacman);
+  ResetGhost(reg, blinky);
+  ResetGhost(reg, pinky);
+  ResetGhost(reg, inky);
+  ResetGhost(reg, clyde);
+  JoinChasing(reg, blinky);
+  JoinChasing(reg, pinky);
 }

@@ -6,17 +6,19 @@
 #include "utils/singlton.hpp"
 class GameContext : public Singlton<GameContext> {
  public:
+  enum class State { playing, won, lost, pausing };
+  State state = State::playing;
   GameContext();
   void Input(SDL_Scancode);
   bool Update();
   void Render();
+  void NewGame();
   int GetElapsedGameTime() const {
     return static_cast<int>(std::floor(gameFrame * FrameTime / 1000));
   }
 
  private:
-  enum class State { playing, won, lost };
-
+  entt::entity pacman;
   entt::entity blinky;
   entt::entity pinky;
   entt::entity inky;
@@ -28,7 +30,6 @@ class GameContext : public Singlton<GameContext> {
   int beanEaten = 0;
   int lifeRemains = 3;
   std::mt19937 rand;
-  State state = State::playing;
   int globalFrame = 0;
   int gameFrame = 0;
   int energizedFrame = 0;
