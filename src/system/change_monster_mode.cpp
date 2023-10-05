@@ -8,14 +8,12 @@
 #include "component/pacman.hpp"
 #include "component/pacman_mode.hpp"
 
-void GhostScared(entt::registry &reg) {
-  const auto view = reg.view<Ghost>();
+void PacmanInvincible(entt::registry &reg) {
+  auto view = reg.view<Pacman>();
+
   for (const entt::entity e : view) {
-    reg.remove<ChaseMode, ScatterMode, ScaredMode>(e);
-    // Ghosts in EatenMode don't get scared
-    if (!reg.all_of<EatenMode>(e)) {
-      reg.emplace<ScaredMode>(e);
-    }
+    reg.remove<InvincibleMode>(e);
+    reg.emplace<InvincibleMode>(e);
   }
 }
 
@@ -26,6 +24,17 @@ void PacmanInvincibleTimeout(entt::registry &reg) {
     --invincible.frameToGo;
     if (invincible.frameToGo <= 0) {
       reg.remove<InvincibleMode>(e);
+    }
+  }
+}
+
+void GhostScared(entt::registry &reg) {
+  const auto view = reg.view<Ghost>();
+  for (const entt::entity e : view) {
+    reg.remove<ChaseMode, ScatterMode, ScaredMode>(e);
+    // Ghosts in EatenMode don't get scared
+    if (!reg.all_of<EatenMode>(e)) {
+      reg.emplace<ScaredMode>(e);
     }
   }
 }

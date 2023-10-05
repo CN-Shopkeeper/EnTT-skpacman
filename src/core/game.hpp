@@ -33,4 +33,5 @@ class GameContext : public Singlton<GameContext> {
   int gameFrame = 0;
   int energizedFrame = 0;
   int multiKillReward = MultiKillReward;
+  int score = 0;
 };

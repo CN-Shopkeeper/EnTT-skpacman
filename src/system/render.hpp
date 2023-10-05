@@ -5,6 +5,6 @@
 #include "pch.hpp"
 void RenderMap(Maze& maze);
 
-void RenderPacman(entt::registry& reg, const size_t imgIndex);
+void RenderPacman(entt::registry& reg, const size_t frame);
 
-void RenderGhost(entt::registry& reg, const size_t tickIndex);
+void RenderGhost(entt::registry& reg, const size_t frame);

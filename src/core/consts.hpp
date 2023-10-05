@@ -3,7 +3,7 @@
 #include "pch.hpp"
 #include "utils/vector2.hpp"
 
-constexpr bool DebugMode = true;
+constexpr bool DebugMode = false;
 
 constexpr SDL_Color KeyColor = {118, 66, 138, 255};
 constexpr SDL_Color BlinkyColor = {255, 0, 0, 255};

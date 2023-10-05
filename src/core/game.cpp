@@ -67,12 +67,15 @@ bool GameContext::Update() {
 
   Moving(reg, maze);
   WallCollide(reg, maze);
+  score -= beanEaten * 10;
   beanEaten += EatBeans(reg, maze);
   if (EatPowerBean(reg, maze)) {
     beanEaten++;
     energizedFrame = ghostScaredTime * Framerate;
     GhostScared(reg);
   }
+
+  score += beanEaten * 10;
 
   if (beanEaten == 30) {
     // 吃掉超过30个豆子时，inky加入战斗
@@ -91,19 +94,30 @@ bool GameContext::Update() {
   const GhostCollision collision = PacmanGhostCollide(reg);
   if (collision.type == GhostCollision::Type::eat) {
     GhostEaten(reg, collision.ghost);
+    score += multiKillReward;
+    multiKillReward += MultiKillReward;
   }
   if (collision.type == GhostCollision::Type::lost) {
-    state = State::lost;
+    if (lifeRemains <= 0) {
+      state = State::lost;
+    } else {
+      lifeRemains--;
+      PacmanInvincible(reg);
+    }
   } else if (beanEaten == beanCount) {
     state = State::won;
+  }
+
+  if (globalFrame % 4 == 0) {
+    std::cout << "Score: " << score << std::endl;
   }
   return true;
 }
 
 void GameContext::Render() {
   RenderMap(maze);
-  RenderPacman(reg, globalFrame % 16 < 8 ? 0 : 1);
-  RenderGhost(reg, globalFrame % 16 < 8 ? 0 : 1);
+  RenderPacman(reg, globalFrame);
+  RenderGhost(reg, globalFrame );
   if (state == State::won) {
     auto& renderer = Application::GetInstance().renderer;
     renderer->DrawTexture(

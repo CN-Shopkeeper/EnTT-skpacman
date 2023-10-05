@@ -21,12 +21,12 @@ void RenderMap(Maze& maze) {
   }
 }
 
-void RenderPacman(entt::registry& reg, const size_t imgIndex) {
+void RenderPacman(entt::registry& reg, const size_t frame) {
   const auto view = reg.view<Position, MovingDir, IntentionDir, PacmanSprite>();
   for (const entt::entity e : view) {
     const Pos pos = view.get<Position>(e).p;
     const Direction movingDir = view.get<MovingDir>(e).d;
-    const Image iamge = view.get<PacmanSprite>(e).images[imgIndex];
+    Image& iamge = view.get<PacmanSprite>(e).images[frame % 16 < 8 ? 0 : 1];
     Size scale;
     float rotation = 0;
     scale.x = movingDir == Direction::Left ? -1 : 1;
@@ -38,12 +38,22 @@ void RenderPacman(entt::registry& reg, const size_t imgIndex) {
       rotation = 90;
     }
 
+    if (reg.all_of<InvincibleMode>(e)) {
+      if (frame % 8 < 4) {
+        iamge.color = InvincibleColor;
+      } else {
+        iamge.color = WhiteColor;
+      }
+    } else {
+      iamge.color = WhiteColor;
+    }
+
     auto& renderer = Application::GetInstance().renderer;
     renderer->DrawImage(iamge, pos, scale, rotation);
   }
 }
 
-void RenderGhost(entt::registry& reg, const size_t tickIndex) {
+void RenderGhost(entt::registry& reg, const size_t frame) {
   const auto view = reg.view<Position, MovingDir, IntentionDir, GhostSprite>();
   for (const entt::entity e : view) {
     const Pos pos = view.get<Position>(e).p;
@@ -64,7 +74,7 @@ void RenderGhost(entt::registry& reg, const size_t tickIndex) {
       const auto frameToGo = reg.get<ScaredMode>(e).frameToGo;
       // 还剩三秒时闪烁提示
       if (frameToGo < static_cast<int>(3.0f * Framerate)) {
-        if (tickIndex == 0) {
+        if (frame % 16 < 8) {
           sprite.image.color = ScaredColor;
         } else {
           sprite.image.color = sprite.color;

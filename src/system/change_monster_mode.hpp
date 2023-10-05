@@ -23,3 +23,4 @@ void GhostScatter(entt::registry &);
 void GhostChase(entt::registry &);
 
 void PacmanInvincibleTimeout(entt::registry &);
+void PacmanInvincible(entt::registry &reg);
