@@ -21,13 +21,12 @@ void RenderMap(Maze& maze) {
   }
 }
 
-void RenderPacman(entt::registry& reg) {
+void RenderPacman(entt::registry& reg, const size_t imgIndex) {
   const auto view = reg.view<Position, MovingDir, IntentionDir, PacmanSprite>();
   for (const entt::entity e : view) {
     const Pos pos = view.get<Position>(e).p;
     const Direction movingDir = view.get<MovingDir>(e).d;
-    // todo choose image
-    const Image iamge = view.get<PacmanSprite>(e).images[0];
+    const Image iamge = view.get<PacmanSprite>(e).images[imgIndex];
     Size scale;
     float rotation = 0;
     scale.x = movingDir == Direction::Left ? -1 : 1;
@@ -60,7 +59,7 @@ void RenderGhost(entt::registry& reg) {
     if (movingDir == Direction::Down) {
       rotation = 90;
     }
-    
+
     if (reg.all_of<ScaredMode>(e)) {
       sprite.image.color = ScaredColor;
     } else if (reg.all_of<EatenMode>(e)) {
