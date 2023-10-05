@@ -93,7 +93,7 @@ bool GameContext::Update() {
 void GameContext::Render() {
   RenderMap(maze);
   RenderPacman(reg, globalFrame % 16 < 8 ? 0 : 1);
-  RenderGhost(reg);
+  RenderGhost(reg, globalFrame % 16 < 8 ? 0 : 1);
   // if (state == State::won) {
   //   fullRender(writer, animera::SpriteID::win);
   // } else if (state == State::lost) {

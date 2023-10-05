@@ -43,7 +43,7 @@ void RenderPacman(entt::registry& reg, const size_t imgIndex) {
   }
 }
 
-void RenderGhost(entt::registry& reg) {
+void RenderGhost(entt::registry& reg, const size_t tickIndex) {
   const auto view = reg.view<Position, MovingDir, IntentionDir, GhostSprite>();
   for (const entt::entity e : view) {
     const Pos pos = view.get<Position>(e).p;
@@ -61,7 +61,17 @@ void RenderGhost(entt::registry& reg) {
     }
 
     if (reg.all_of<ScaredMode>(e)) {
-      sprite.image.color = ScaredColor;
+      const auto frameToGo = reg.get<ScaredMode>(e).frameToGo;
+      // 还剩三秒时闪烁提示
+      if (frameToGo < static_cast<int>(3.0f * Framerate)) {
+        if (tickIndex == 0) {
+          sprite.image.color = ScaredColor;
+        } else {
+          sprite.image.color = sprite.color;
+        }
+      } else {
+        sprite.image.color = ScaredColor;
+      }
     } else if (reg.all_of<EatenMode>(e)) {
       sprite.image.color = WhiteColor;
     } else {
