@@ -34,7 +34,6 @@ entt::entity makeGhost(entt::registry &reg, const Coor home, const Coor scatter,
   reg.emplace<ScatterMode>(e);
   reg.emplace<IntentionDir>(e);
   reg.emplace<MovingDir>(e);
-  reg.emplace<Target>(e);
   reg.emplace<Movement>(e, 4.0f, Pos{0, 0});
   reg.emplace<Ghost>(e);
   reg.emplace<GhostSprite>(e, image, color);

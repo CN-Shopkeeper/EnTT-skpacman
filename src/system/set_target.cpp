@@ -15,6 +15,9 @@
 
 namespace {
 bool shouldSetTarget(entt::registry &reg, entt::entity e, const Maze &maze) {
+  if (!reg.all_of<Target, Position, MovingDir, IntentionDir>(e)) {
+    return false;
+  }
   const Pos pos = reg.get<Position>(e).p;
   const Direction movingDir = reg.get<MovingDir>(e).d;
   const Direction intentionDir = reg.get<IntentionDir>(e).d;
@@ -60,7 +63,6 @@ void SetBlinkyChaseTarget(entt::registry &reg, entt::entity e,
                                              PosToCoor(ghostPos));
 
   auto &target = reg.get<Target>(e);
-  target.p = pacmanPos;
   target.path = path;
 }
 
@@ -81,7 +83,6 @@ void SetPinkyChaseTarget(entt::registry &reg, entt::entity e,
       ShortestPathBetweenCoors(reg, maze, e, targetCoor, PosToCoor(ghostPos));
 
   auto &target = reg.get<Target>(e);
-  target.p = GetTheAnchor(targetCoor);
   target.path = path;
 }
 
@@ -106,7 +107,6 @@ void SetInkyChaseTarget(entt::registry &reg, entt::entity e, const Maze &maze) {
       ShortestPathBetweenCoors(reg, maze, e, targetCoor, ghostCoor);
 
   auto &target = reg.get<Target>(e);
-  target.p = GetTheAnchor(targetCoor);
   target.path = path;
 }
 
@@ -124,11 +124,9 @@ void SetClydeChaseTarget(entt::registry &reg, entt::entity e,
 
   auto &target = reg.get<Target>(e);
   if (path.size() >= 8) {
-    target.p = pacmanPos;
     target.path = path;
   } else {
     // ? 是吗
-    reg.get<Target>(e).p = GetTheAnchor(reg.get<HomePosition>(e).scatter);
     path = ShortestPathBetweenCoors(
         reg, maze, e, reg.get<HomePosition>(e).scatter, ghostCoor);
     target.path = path;
@@ -151,7 +149,6 @@ void SetScatterTarget(entt::registry &reg, entt::entity e, const Maze &maze) {
   }
 
   auto &target = reg.get<Target>(e);
-  target.p = GetTheAnchor(reg.get<HomePosition>(e).scatter);
   if (scatterInfo.reach) {
     const Coor nextRotate = scatterInfo.rotateCCW
                                 ? DirToCoor(rotateCCW(movingDir))
@@ -193,8 +190,6 @@ void SetScaredTarget(entt::registry &reg, entt::entity e, const Maze &maze,
     nextStep = DirToCoor(movingDir);
   }
 
-  // 设置为自己
-  reg.get<Target>(e).p = pos;
   reg.get<Target>(e).path = std::vector<Coor>{nextStep};
 }
 
@@ -203,7 +198,6 @@ void SetEatenTarget(entt::registry &reg, entt::entity e, const Maze &maze) {
     return;
   }
   const Pos pos = reg.get<Position>(e).p;
-  reg.get<Target>(e).p = GetTheAnchor(reg.get<HomePosition>(e).home);
   reg.get<Target>(e).path = ShortestPathBetweenCoors(
       reg, maze, e, reg.get<HomePosition>(e).home, PosToCoor(pos));
 }

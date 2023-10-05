@@ -13,6 +13,16 @@
 #include "core/consts.hpp"
 #include "utils/pos_coor.hpp"
 
+namespace {
+bool isOutsideHouse(const Coor coor) {
+  if (coor.x >= outsideHouseRange[0].x && coor.x <= outsideHouseRange[1].x &&
+      coor.y >= outsideHouseRange[0].y && coor.y <= outsideHouseRange[1].y) {
+    return false;
+  }
+  return true;
+}
+}  // namespace
+
 void EnterHouse(entt::registry &reg) {
   const auto view =
       reg.view<EnteringHouse, Position, HomePosition, MovingDir, Movement>();
@@ -29,27 +39,15 @@ void EnterHouse(entt::registry &reg) {
 
 void LeaveHouse(entt::registry &reg) {
   auto view = reg.view<LeavingHouse, Position, Target>();
-  auto outsideHouse0 = GetTheAnchor(outsideHouse[0]);
-  auto outsideHouse1 = GetTheAnchor(outsideHouse[1]);
   for (const entt::entity e : view) {
-    if (view.get<Position>(e).p == outsideHouse0 ||
-        view.get<Position>(e).p == outsideHouse1) {
+    if (isOutsideHouse(PosToCoor(view.get<Position>(e).p))) {
       reg.remove<LeavingHouse>(e);
-    } else {
-      // leaveHouse is called after the set*Target systems so this will
-      // overwrite the target position. It's a little bit hacky but it
-      // works here.
-
-      // We actually need to do this because ghosts can sometimes get stuck
-      // in the house. If their target is towards the bottom of the maze,
-      // they will move left and right without going up and out of the house
-      auto dis0 = outsideHouse0.ManhattanDistance(view.get<Position>(e).p);
-      auto dis1 = outsideHouse1.ManhattanDistance(view.get<Position>(e).p);
-      if (dis0 <= dis1) {
-        view.get<Target>(e).p = outsideHouse0;
-      } else {
-        view.get<Target>(e).p = outsideHouse1;
-      }
     }
   }
+}
+
+void JoinChasing(entt::registry &reg, entt::entity e) {
+  reg.remove<LeavingHouse, Target>(e);
+  reg.emplace<LeavingHouse>(e);
+  reg.emplace<Target>(e);
 }

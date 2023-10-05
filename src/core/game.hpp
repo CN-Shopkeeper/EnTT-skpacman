@@ -2,6 +2,7 @@
 
 #include "maze.hpp"
 #include "pch.hpp"
+#include "texture.hpp"
 #include "utils/singlton.hpp"
 class GameContext : public Singlton<GameContext> {
  public:
@@ -15,6 +16,11 @@ class GameContext : public Singlton<GameContext> {
 
  private:
   enum class State { playing, won, lost };
+
+  entt::entity blinky;
+  entt::entity pinky;
+  entt::entity inky;
+  entt::entity clyde;
 
   entt::registry reg;
   int beanCount = 0;

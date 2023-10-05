@@ -3,7 +3,9 @@
 #include <entt/entity/registry.hpp>
 
 #include "component/dir.hpp"
+#include "component/ghost.hpp"
 #include "component/ghost_mode.hpp"
+#include "component/target.hpp"
 #include "system/can_move.hpp"
 #include "utils/dir.hpp"
 #include "utils/pos_coor.hpp"
@@ -26,6 +28,9 @@ void setSpeed(entt::registry &reg, entt::entity e) {
 void Moving(entt::registry &reg, const Maze &maze) {
   auto view = reg.view<Position, MovingDir, IntentionDir, Movement>();
   for (const entt::entity e : view) {
+    if (reg.all_of<Ghost>(e) && !reg.all_of<Target>(e)) {
+      continue;
+    }
     setSpeed(reg, e);
     Position &position = view.get<Position>(e);
     Direction &movingDir = view.get<MovingDir>(e).d;

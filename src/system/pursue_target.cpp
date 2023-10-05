@@ -41,12 +41,13 @@ Direction getDirectionFromPath(const std::vector<Coor> &path,
 }
 
 void PursueTarget(entt::registry &reg, const Maze &maze) {
-  constexpr float inf = 1e10f;
   // not include pacman
   auto view = reg.view<Target, Position, MovingDir, IntentionDir>();
   for (const entt::entity e : view) {
     const auto movingDir = reg.get<MovingDir>(e).d;
     const auto &path = view.get<Target>(e).path;
     view.get<IntentionDir>(e).d = getDirectionFromPath(path, movingDir);
+    // std::cout << "entity " << static_cast<int>(e) << "intentionDir "
+    //           << static_cast<int>(view.get<IntentionDir>(e).d) << std::endl;
   }
 }

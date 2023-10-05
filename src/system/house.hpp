@@ -6,3 +6,4 @@
 
 void EnterHouse(entt::registry &);
 void LeaveHouse(entt::registry &);
+void JoinChasing(entt::registry &reg, entt::entity e);

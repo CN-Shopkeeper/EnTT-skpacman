@@ -1,7 +1,6 @@
 #include "game.hpp"
 
 #include "app.hpp"
-#include "component/house.hpp"
 #include "factory.hpp"
 #include "system/bfs.hpp"
 #include "system/change_monster_mode.hpp"
@@ -21,17 +20,18 @@ GameContext::GameContext()
   const entt::entity pacman = MakePacman(
       reg, {tilesheet->Get(static_cast<int>(ImageTileType::Pacman), 0),
             tilesheet->Get(static_cast<int>(ImageTileType::PacmanEat), 0)});
-  const entt::entity blinky = MakeBlinky(
+  blinky = MakeBlinky(
       reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0), pacman);
-  const entt::entity pinky = MakePinky(
+  pinky = MakePinky(
       reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0), pacman);
-  MakeInky(reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0),
-           pacman, blinky);
-  MakeClyde(reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0),
-            pacman);
+  inky =
+      MakeInky(reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0),
+               pacman, blinky);
+  clyde = MakeClyde(
+      reg, tilesheet->Get(static_cast<int>(ImageTileType::Ghost), 0), pacman);
 
-  reg.emplace<LeavingHouse>(blinky);
-  reg.emplace<LeavingHouse>(pinky);
+  JoinChasing(reg, blinky);
+  JoinChasing(reg, pinky);
   // seeding a pseudo random number generator with a random source
   rand.seed(std::random_device{}());
 }
@@ -73,6 +73,16 @@ bool GameContext::Update() {
     energizedFrame = ghostScaredTime * Framerate;
     GhostScared(reg);
   }
+
+  if (beanEaten == 30) {
+    // 吃掉超过30个豆子时，inky加入战斗
+    JoinChasing(reg, inky);
+  }
+  if (beanEaten == beanCount / 3) {
+    // 吃掉超过1/3豆子时，clyde加入战斗
+    JoinChasing(reg, clyde);
+  }
+
   EnterHouse(reg);
   SetTarget(reg, maze, rand);
   LeaveHouse(reg);
@@ -94,9 +104,17 @@ void GameContext::Render() {
   RenderMap(maze);
   RenderPacman(reg, globalFrame % 16 < 8 ? 0 : 1);
   RenderGhost(reg, globalFrame % 16 < 8 ? 0 : 1);
-  // if (state == State::won) {
-  //   fullRender(writer, animera::SpriteID::win);
-  // } else if (state == State::lost) {
-  //   fullRender(writer, animera::SpriteID::lose);
-  // }
+  if (state == State::won) {
+    auto& renderer = Application::GetInstance().renderer;
+    renderer->DrawTexture(
+        *Application::GetInstance().textureManager->Find("Win"),
+        SDL_Rect{0, 0, 256, 256}, (WindowWidth - 256) / 2,
+        (WindowHeight - 256) / 2);
+  } else if (state == State::lost) {
+    auto& renderer = Application::GetInstance().renderer;
+    renderer->DrawTexture(
+        *Application::GetInstance().textureManager->Find("Gameover"),
+        SDL_Rect{0, 0, 256, 256}, (WindowWidth - 256) / 2,
+        (WindowHeight - 256) / 2);
+  }
 }
