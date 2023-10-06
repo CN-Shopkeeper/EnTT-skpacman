@@ -57,6 +57,8 @@ if(NOT TARGET SDL2)
 
             add_library(SDL2 INTERFACE)
             target_link_directories(SDL2 INTERFACE ${SDL_LIB_DIR})
+
+            # target_link_libraries(SDL2 INTERFACE "-lmingw32 -lSDL2main -lSDL2 -mwindows -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -lm -ldinput8 -ldxguid -ldxerr8 -luser32 -lgdi32 -lwinmm -limm32 -lole32 -loleaut32 -lshell32 -lsetupapi -lversion -luuid")
             target_link_libraries(SDL2 INTERFACE "-lmingw32 -lSDL2main -lSDL2 -mwindows")
             target_include_directories(SDL2 INTERFACE ${SDL_INCLUDE_DIR})
             message(
